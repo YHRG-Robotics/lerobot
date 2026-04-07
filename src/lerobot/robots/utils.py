@@ -68,10 +68,14 @@ def make_robot_from_config(config: RobotConfig) -> Robot:
         from .bi_openarm_follower import BiOpenArmFollower
 
         return BiOpenArmFollower(config)
-    elif config.type == "mock_robot":
+    elif config.type == "mosck_robot":
         from tests.mocks.mock_robot import MockRobot
 
         return MockRobot(config)
+    elif config.type == "theseus_s1":
+        from .theseus_sx import SxArm 
+
+        return SxArm(config)
     else:
         try:
             return cast(Robot, make_device_from_device_class(config))
