@@ -72,10 +72,10 @@ def make_robot_from_config(config: RobotConfig) -> Robot:
         from tests.mocks.mock_robot import MockRobot
 
         return MockRobot(config)
-    elif config.type == "theseus_s1":
-        from .theseus_sx import SxArm 
-
-        return SxArm(config)
+    elif config.type == "theseus_s1_follower":
+        from .theseus_sx import SxFollower
+        # print("init_follower")
+        return SxFollower(config)
     else:
         try:
             return cast(Robot, make_device_from_device_class(config))

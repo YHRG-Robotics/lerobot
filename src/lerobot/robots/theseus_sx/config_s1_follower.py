@@ -15,8 +15,7 @@ class SxFollowerConfig:
 
     use_degrees: bool = True
 
-@RobotConfig.register_subclass("so101_follower")
-@RobotConfig.register_subclass("so100_follower")
+@RobotConfig.register_subclass("theseus_s1_follower")
 @dataclass
 class SxFollowerRobotConfig(RobotConfig, SxFollowerConfig):
     pass

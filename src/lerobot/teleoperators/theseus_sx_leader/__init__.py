@@ -15,9 +15,7 @@
 # limitations under the License.
 
 from .config_sx_leader import (
-    SO100LeaderConfig,
-    SO101LeaderConfig,
-    SOLeaderConfig,
-    SOLeaderTeleopConfig,
+    SxLeaderTeleopConfig,
+    SxLeaderConfig,
 )
-from .sx_leader import SO100Leader, SO101Leader, SOLeader
+from .sx_leader import SxLeader

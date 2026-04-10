@@ -26,12 +26,14 @@ class SxFollower(Robot):
         # choose normalization mode depending on config if available
         self.arm = None
         try:
+            print("2")
             self.arm = S1_arm(
-                control_mode = control_mode.only_sim,
+                mode = control_mode.only_sim,
                 end_effector="gripper",
             )
-        except:
-            logger.error("Failed to connect to S1 arm")
+            print("3")
+        except Exception as e:
+            logger.error(f"Failed to connect to S1 arm: {e}")
             raise
         self.motors={
                 "joint_1":0,
@@ -40,9 +42,11 @@ class SxFollower(Robot):
                 "joint_4":3,
                 "joint_5":4,
                 "joint_6":5,
-                "gripper":6,
+                "end":5,
             }
+        print("init_follower2")
         self.cameras = make_cameras_from_configs(config.cameras)
+        self.connect_flag = False
 
     @property
     def _motors_ft(self) -> dict[str, type]:
@@ -64,7 +68,7 @@ class SxFollower(Robot):
 
     @property
     def is_connected(self) -> bool:
-        return self.arm is not None
+        return self.connect_flag
 
     @check_if_already_connected
     def connect(self, calibrate: bool = True) -> None:
@@ -79,7 +83,9 @@ class SxFollower(Robot):
             cam.connect()
 
         self.configure()
+        self.connect_flag = True
         logger.info(f"{self} connected.")
+
 
     @property
     def is_calibrated(self) -> bool:
@@ -99,6 +105,7 @@ class SxFollower(Robot):
         # Read arm position
         start = time.perf_counter()
         obs_pos = self.arm.get_pos()
+        print(len(obs_pos),len(self.motors))
         obs_dict = { f"{motor}.pos": obs_pos[self.motors[motor]] for motor in self.motors}
         dt_ms = (time.perf_counter() - start) * 1e3
         logger.debug(f"{self} read state: {dt_ms:.1f}ms")
@@ -137,8 +144,9 @@ class SxFollower(Robot):
             goal_pos = ensure_safe_goal_position(goal_present_pos, self.config.max_relative_target)
 
         # Send goal position to the arm
-        self.arm.joint_control(goal_pos[:6])
-        self.bus.sync_write("Goal_Position", goal_pos)
+        jnt_cmd = [goal_pos[key] for key in self.motors]
+        self.arm.joint_control(jnt_cmd[:6])
+        # self.bus.sync_write("Goal_Position", goal_pos)
         return {f"{motor}.pos": val for motor, val in goal_pos.items()}
 
     @check_if_not_connected
@@ -149,8 +157,5 @@ class SxFollower(Robot):
 
         logger.info(f"{self} disconnected.")
 
-
-# SO100Follower = SOFollower
-# SO101Follower = SOFollower
 
    

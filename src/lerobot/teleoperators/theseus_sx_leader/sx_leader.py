@@ -47,15 +47,17 @@ class SxLeader(Teleoperator):
             "joint_4": 3,
             "joint_5": 4,
             "joint_6": 5,
-            "teach": 6,
+            "end": 5,
         }
         try:
             self.arm = S1_arm(
                 dev = self.config.port,
-                mode = control_mode.only_sim
+                mode = control_mode.only_sim,
+                end_effector = "gripper"
             )
         except:
             logger.error("Failed to initialize arm")
+        self.connect_flag = False
 
 
     @property
@@ -68,13 +70,14 @@ class SxLeader(Teleoperator):
 
     @property
     def is_connected(self) -> bool:
-        return self.arm is not None
+        return self.connect_flag
 
     @check_if_already_connected
     def connect(self, calibrate: bool = True) -> None:
         self.arm.enable()
 
         logger.info(f"{self} connected.")
+        self.connect_flag = True
 
     @property
     def is_calibrated(self) -> bool:
@@ -93,7 +96,8 @@ class SxLeader(Teleoperator):
     def get_action(self) -> dict[str, float]:
         start = time.perf_counter()
         action = self.arm.get_pos()
-        self.arm.gravity()
+        print(len(action),len(self.motors))
+        # self.arm.gravity()
         action = { f"{motor}.pos": action[self.motors[motor]] for motor in self.motors}
         dt_ms = (time.perf_counter() - start) * 1e3
         logger.debug(f"{self} read action: {dt_ms:.1f}ms")

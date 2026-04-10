@@ -71,6 +71,7 @@ from lerobot.processor import (
 from lerobot.robots import (  # noqa: F401
     Robot,
     RobotConfig,
+    theseus_sx,
     bi_openarm_follower,
     bi_so_follower,
     earthrover_mini_plus,
@@ -87,6 +88,7 @@ from lerobot.teleoperators import (  # noqa: F401
     Teleoperator,
     TeleoperatorConfig,
     bi_openarm_leader,
+    theseus_sx_leader,
     bi_so_leader,
     gamepad,
     homunculus,
@@ -218,12 +220,15 @@ def teleoperate(cfg: TeleoperateConfig):
     )
 
     teleop = make_teleoperator_from_config(cfg.teleop)
+    print("1")
     robot = make_robot_from_config(cfg.robot)
+    print("2")
     teleop_action_processor, robot_action_processor, robot_observation_processor = make_default_processors()
-
+    
     teleop.connect()
+    
     robot.connect()
-
+    
     try:
         teleop_loop(
             teleop=teleop,
