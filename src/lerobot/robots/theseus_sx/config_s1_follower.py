@@ -2,7 +2,7 @@ from ..config import RobotConfig
 from dataclasses import dataclass, field
 from lerobot.cameras import CameraConfig
 @dataclass
-class S1FollowerConfig:
+class SxFollowerConfig:
 
     # Port to connect to the arm
     port: str
@@ -18,6 +18,6 @@ class S1FollowerConfig:
 @RobotConfig.register_subclass("so101_follower")
 @RobotConfig.register_subclass("so100_follower")
 @dataclass
-class S1FollowerRobotConfig(RobotConfig, S1FollowerConfig):
+class SxFollowerRobotConfig(RobotConfig, SxFollowerConfig):
     pass
 

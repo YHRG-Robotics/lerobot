@@ -1,5 +1,5 @@
 from .config_s1_follower import (
-    S1FollowerConfig,
-    S1FollowerRobotConfig,
+    SxFollowerConfig,
+    SxFollowerRobotConfig,
 )
-from .S1_follow import S100Follower, S101Follower, S1Follower
+from .S1_follow import SxFollower

@@ -23,21 +23,7 @@ from lerobot.types import RobotAction, RobotObservation
 from lerobot.utils.constants import HF_LEROBOT_CALIBRATION, ROBOTS
 
 from .config import RobotConfig
-
-
-# TODO(aliberts): action/obs typing such as Generic[ObsType, ActType] similar to gym.Env ?
-# https://github.com/Farama-Foundation/Gymnasium/blob/3287c869f9a48d99454306b0d4b4ec537f0f35e3/gymnasium/core.py#L23
 class Robot(abc.ABC):
-    """
-    The base abstract class for all LeRobot-compatible robots.
-
-    This class provides a standardized interface for interacting with physical robots.
-    Subclasses must implement all abstract methods and properties to be usable.
-
-    Attributes:
-        config_class (RobotConfig): The expected configuration class for this robot.
-        name (str): The unique robot name used to identify this robot type.
-    """
 
     # Set these in ALL subclasses
     config_class: builtins.type[RobotConfig]
